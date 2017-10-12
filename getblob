@@ -1,0 +1,33 @@
+#!/usr/bin/env node
+
+'use strict';
+
+if (process.argv.length < 5 ||
+  !process.env.AZURE_SUBSCRIPTION_ID ||
+  !process.env.AZURE_RESOURCE_GROUP ||
+  !process.env.AZURE_STORAGE_ACCOUNT
+) {
+  console.error(`
+Usage: getblob CONTAINER BLOB FILE
+
+The following environment variables are required.
+
+export AZURE_SUBSCRIPTION_ID=9di38e54-a416-42fd-859c-9dh4723h010e3
+export AZURE_RESOURCE_GROUP=my_resource_group
+export AZURE_STORAGE_ACCOUNT=storage_account_name
+`);
+  process.exit(1);
+}
+
+const storage = require('./')();
+
+storage.get(
+  process.argv[2],
+  process.argv[3],
+  process.argv[4],
+  function(err) {
+    if (err) {
+      console.error(err);
+      process.exit(1);
+    }
+  });

@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+'use strict';
+
+if (!process.env.AZURE_SUBSCRIPTION_ID ||
+  !process.env.AZURE_RESOURCE_GROUP ||
+  !process.env.AZURE_STORAGE_ACCOUNT
+) {
+  console.error(`
+Usage: getkey
+
+The following environment variables are required.
+
+export AZURE_SUBSCRIPTION_ID=9di38e54-a416-42fd-859c-9dh4723h010e3
+export AZURE_RESOURCE_GROUP=my_resource_group
+export AZURE_STORAGE_ACCOUNT=storage_account_name
+`);
+  process.exit(1);
+}
+
+const storage = require('./')();
+
+storage.getAccessKey(function(err, key) {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  } else {
+    process.stdout.write(key);
+  }
+});
